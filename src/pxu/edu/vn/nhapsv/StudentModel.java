@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat;
 
 public class StudentModel {
 	static Connection conn;
-	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public StudentModel() {
 		conn = connnectDB();
 	}
 
-	public void addStudent(Student input) {
-		PreparedStatement ps = null;
+	public boolean addStudent(Student input) {
+		boolean flag = true;
 		try {
 
 			String sql = "insert into  student(hoten,ngaysinh,gioitinh,sdt) values(?,?,?,?)";
@@ -27,10 +27,13 @@ public class StudentModel {
 				statement.setString(4, input.getSdt());
 			}
 			// Step 6: Process the results
-			ps.execute();
+			statement.execute();
+			statement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			flag = false;
 		}
+		return flag;
 	}
 
 	private Connection connnectDB() {
